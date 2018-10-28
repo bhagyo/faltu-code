@@ -1,0 +1,5 @@
+MVI A,01H
+RAL
+RAL
+RAL
+HLT
