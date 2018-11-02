@@ -1,64 +1,120 @@
-/****** HAREE KRISHNA   ******/
-
-/*
-                     শুনেছি তোমার ভীষণ রাগ ??
-                        সে কি  রাগ,নাকি
-                     মগজ কোণে পচন ধরা
-                        পুরনো কোডের বাগ ?
-*/
 #include<bits/stdc++.h>
 using namespace std;
-typedef long long int lld;
-typedef unsigned long long int llu;
-
 #define sf scanf
 #define pf printf
-#define ff first
-#define ss second
-#define pii pair<int,int>
-#define PI acos(-1.0)
-#define sq(x) (x)*(x)
-#define nn printf("\n")
-#define mem(arr,val) memset(arr,val,sizeof(arr))
 #define TEST int test,zz;scanf("%d",&zz);getchar();for(test=1;test<=zz;test++)
-
 #define sci(x) scanf("%d",&x)
-#define sci2(x,y) scanf("%d %d",&x,&y)
-#define sci3(x,y,z) scanf("%d %d %d",&x,&y,&z)
-
-#define pfi(x) printf("%d\n",x)
-#define pfi2(x,y) printf("%d %d\n",x,y)
-#define pfi3(x,y,z) printf("%d %d %d\n",x,y,z)
-
-#define scs(str) scanf("%s",str)
-
-#define pfs(str) printf("%s\n",str)
-
 #define pb push_back
+#define sz 55
 
-/*
-ASCII Vlaue
-A=65,Z=90,a=97,z=122,0=48,9=57
-freopen("input.txt","r",stdin);
-freopen("output.txt","w",stdout);
-*/
-#define chk1 printf("chek1\n")
-#define chk2 printf("chek2\n")
-#define chk3 printf("chek3\n")
-#define sz 10005
-#define sz1 201
-
-/******   start your code   *******/
-
-
+struct node
+{
+    int st,en,cost;
+    node() {}
+    node(int _st,int _en,int _cost)
+    {
+        st=_st;
+        en=_en;
+        cost=_cost;
+    }
+};
+bool fun(node a,node b)
+{
+    return a.cost<b.cost;
+}
+int parent[sz],lop,n;
+vector<node> vec;
+bool fin(int u,int v)
+{
+    if(parent[u]==parent[v]) return false;
+    return true;
+}
+void uni(int u,int v)
+{
+    int temp=parent[u];
+    for(int i=1;i<=n;i++)
+        if(parent[i]==temp)
+            parent[i]=parent[v];
+}
+int mst(int n)
+{
+    sort(vec.begin(),vec.end(),fun);
+    int cnt=0,tot=0;
+    lop=vec.size();
+    for(int i=0; i<lop; i++)
+    {
+        int u=vec[i].st;
+        int v=vec[i].en;
+        if(fin(u,v))
+        {
+            uni(u,v);
+            tot+=vec[i].cost;
+            cnt++;
+            if(cnt==n-1) break;
+        }
+    }
+    return tot;
+}
+set<int> st;
 int main()
 {
-
+    int i,j,mi,mj,total,res,val;
+    TEST
+    {
+        for(i=0;i<52;i++) parent[i]=i;
+        sci(n);
+        total=0;
+        for(i=1; i<=n; i++)
+        {
+            for(j=1; j<=n; j++)
+            {
+                sci(val);
+                total+=val;
+                if(i==j or !val) continue;
+                mi=i,mj=j;
+                if(mi>mj) swap(mi,mj);
+                vec.pb(node(mi,mj,val));
+            }
+        }
+        res=mst(n);
+        for(i=1; i<=n; i++)
+            st.insert(parent[i]);
+        if(st.size()==1)
+            pf("Case %d: %d\n",test,total-res);
+        else
+            pf("Case %d: -1\n",test);
+        vec.clear();
+        st.clear();
+    }
     return 0;
 }
 
 /*
+3
+2
+27 26
+1 52
+4
+0 10 10 0
+0 0 1 1
+0 0 0 2
+0 0 0 0
+4
+0 1 0 0
+1 0 0 0
+0 0 0 1
+0 0 1 0
+
+1
 5
-1 3 4 2 5
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 0 0
+0 0 1 0 1
+0 0 0 0 0
+
+
+
+
 Outp
 */
